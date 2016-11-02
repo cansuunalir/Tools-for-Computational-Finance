@@ -32,9 +32,9 @@ def relative_strength_index(series, window=14, average_type="SMA"):
 def average_true_range(df, window=14):
     new_df = pd.DataFrame()
     new_df["atr1"] = (df["High"] - df["Low"]).abs()
-    new_df["atr2"] = (df["High"] - df["Adj Close"].shift()).abs()
-    new_df["atr3"] = (df["Low"] - df["Adj Close"].shift()).abs()
-    return new_df[["atr1", "atr2", "atr3"]].max(axis=1)
+    new_df["atr2"] = (df["High"] - df["Close"].shift()).abs()
+    new_df["atr3"] = (df["Low"] - df["Close"].shift()).abs()
+    return simple_moving_average(new_df[["atr1", "atr2", "atr3"]].max(axis=1), window)
 
 
 def average_directional_index(df, window=14):
