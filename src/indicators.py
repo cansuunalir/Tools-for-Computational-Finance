@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 def simple_moving_average(series, window=14):
@@ -54,3 +55,21 @@ def average_directional_index(df, window=14):
     minus_di = 100 * simple_moving_average(minus_dm, window).fillna(0) / atr
 
     return 100 * simple_moving_average((plus_di - minus_di).abs() / (plus_di + minus_di), window)
+
+
+def aroon_indicator(df, window=14):
+    period = 5
+
+    high = df["High"]
+    low = df["Low"]
+
+    dayssinceperiodhigh = 0
+    dayssinceperiodlow = 0
+
+    aroon_up = 100 * (period - dayssinceperiodhigh) / period
+    aroon_down = 100 * (period - dayssinceperiodlow) / period
+
+    max_index = high.index[
+        high.rolling(period).apply(np.argmax)[(period - 1):].astype(float) + np.arange(len(high) - (period - 1))]
+
+    return max_index
