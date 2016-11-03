@@ -63,18 +63,32 @@ def aroon_indicator(df, window=14):
     high = df["High"]
     low = df["Low"]
 
-    rollingMax = pd.rolling_max(high, period)
-    rollingMin = pd.rolling_min(low, period)
+    highestHigh = pd.rolling_max(high, period)
+    lowestLow = pd.rolling_min(low, period)
 
     maxIndex = high.index[
         high.rolling(period).apply(np.argmax)[(period - 1):].astype(float) + np.arange(len(high) - (period - 1))]
     minIndex = low.index[
         low.rolling(period).apply(np.argmax)[(period - 1):].astype(float) + np.arange(len(low) - (period - 1))]
 
-    timeDelta_max = ((rollingMax.dropna().index - maxIndex) / np.timedelta64(1, 'D')).astype(int)
-    timeDelta_min = ((rollingMin.dropna().index - minIndex) / np.timedelta64(1, 'D')).astype(int)
+    timeDelta_max = ((highestHigh.dropna().index - maxIndex) / np.timedelta64(1, 'D')).astype(int)
+    timeDelta_min = ((lowestLow.dropna().index - minIndex) / np.timedelta64(1, 'D')).astype(int)
 
-    aroon_up = 100 * (period - timeDelta_max) / period
-    aroon_down = 100 * (period - timeDelta_min) / period
+    aroon_up = 100 * (period - timeDelta_max)/period
+    aroon_down = 100 * (period - timeDelta_min)/period
+
 
     return aroon_up
+
+def stochastic_oscillator(df, window=14):
+    period = 14
+
+    high = df["High"]
+    low = df["Low"]
+
+    highestHigh = pd.rolling_max(high, period)
+    lowestLow = pd.rolling_min(low, period)
+
+    k = (df["Close"] - lowestLow)/(highestHigh - lowestLow) * 100
+
+    return pd.rolling_mean(k,3)
