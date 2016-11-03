@@ -63,13 +63,18 @@ def aroon_indicator(df, window=14):
     high = df["High"]
     low = df["Low"]
 
-    dayssinceperiodhigh = 0
-    dayssinceperiodlow = 0
+    rollingMax = pd.rolling_max(high, period)
+    rollingMin = pd.rolling_min(low, period)
 
-    aroon_up = 100 * (period - dayssinceperiodhigh) / period
-    aroon_down = 100 * (period - dayssinceperiodlow) / period
-
-    max_index = high.index[
+    maxIndex = high.index[
         high.rolling(period).apply(np.argmax)[(period - 1):].astype(float) + np.arange(len(high) - (period - 1))]
+    minIndex = low.index[
+        low.rolling(period).apply(np.argmax)[(period - 1):].astype(float) + np.arange(len(low) - (period - 1))]
 
-    return max_index
+    timeDelta_max = ((rollingMax.dropna().index - maxIndex) / np.timedelta64(1, 'D')).astype(int)
+    timeDelta_min = ((rollingMin.dropna().index - minIndex) / np.timedelta64(1, 'D')).astype(int)
+
+    aroon_up = 100 * (period - timeDelta_max) / period
+    aroon_down = 100 * (period - timeDelta_min) / period
+
+    return aroon_up
