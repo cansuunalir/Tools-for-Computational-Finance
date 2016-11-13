@@ -31,7 +31,8 @@ df = pd.read_csv('data.csv') #, index_col='Date', parse_dates=True)
 df['Date'] = pd.to_datetime(df.Date)
 df = df.sort('Date')
 df = df.set_index('Date')
-# print(df)
+
+print(df)
 # df['Date'] = pd.to_datetime(df['Date'])
 # df['Date'] = pd.to_datetime(df['Date'])
 # print(df[['Open', 'Close']].head())
@@ -58,10 +59,23 @@ df = df.set_index('Date')
 # % pylab inline
 # pylab.rcParams['figure.figsize'] = (15, 9)  # Change the size of plots
 
-df['Adj Close'].plot(grid=True)
+#df['Adj Close'].plot(grid=True)
 # df['Emwa'] = pd.ewma(df['Close'],span=60,freq='D')
 # df['SMA']  = indicators.simple_moving_average(df, 4)
-# df['EWMA']  = indicators.exponential_moving_average(df['Close'], 40)
+#df['EWMA']  = indicators.exponential_moving_average(df['Close'], 26)
+#df['EMA']  = indicators.exponential_moving_average(df['Close'], 14)
+df['MACD'], df['Signal'], df['Histogram'] = indicators.moving_average_convergence_divergence(df['Close'])
+print(df['MACD'])
+#df['MACD'].plot(grid=True)
+#plt.show()
+#print(df['EWMA'])
+#print(df['EMA'])
+axx = df['MACD'].plot(grid=True)
+ax = df['Signal'].plot(grid=True)
+df['Histogram'].plot()
+
+
+plt.show()
 # df['SMA'] = df['Close'].ewm()
 # print(df['SMA'])
 # df['EWMA'].plot(grid=True)
@@ -76,8 +90,9 @@ df['Adj Close'].plot(grid=True)
 
 # print(df['RSI'])
 
-df["ADX"] = indicators.average_directional_index(df, 14)
-df['ADX'].plot(grid=True)
-plt.show()
+#df["ADX"] = indicators.average_directional_index(df, 14)
+#df['ADX'].plot(grid=True)
+#plt.show()
 
 # print(df["ADX"])
+

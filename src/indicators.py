@@ -9,6 +9,25 @@ def exponential_moving_average(series, window=14):
     return series.ewm(span=window).mean()
 
 
+def moving_average_convergence_divergence(series):
+    ema_12 = exponential_moving_average(series, 12)
+    ema_26 = exponential_moving_average(series, 26)
+    macd_line = ema_12 - ema_26
+    signal_line = exponential_moving_average(macd_line, 9)
+    macd_histogram = macd_line - signal_line
+    return macd_line, signal_line, macd_histogram
+
+
+def accumulation_distribution_line(df):
+    close = df["Close"]
+    high = df["High"]
+    low = df["Low"]
+    series_1 = [(close-low) - (high-close)]
+    series_2 = [high-low]
+    new_df = pd.DataFrame()
+    return series_1
+
+
 def relative_strength_index(series, window=14, average_type="SMA"):
     delta = series.fillna(0).diff()[1:]
     ups = delta.copy()
@@ -54,3 +73,5 @@ def average_directional_index(df, window=14):
     minus_di = 100 * simple_moving_average(minus_dm, window).fillna(0) / atr
 
     return 100 * simple_moving_average((plus_di - minus_di).abs() / (plus_di + minus_di), window)
+
+
