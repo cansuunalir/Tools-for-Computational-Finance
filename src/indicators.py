@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 def simple_moving_average(series, window=14):
@@ -51,9 +52,9 @@ def relative_strength_index(series, window=14, average_type="SMA"):
 def average_true_range(df, window=14):
     new_df = pd.DataFrame()
     new_df["atr1"] = (df["High"] - df["Low"]).abs()
-    new_df["atr2"] = (df["High"] - df["Adj Close"].shift()).abs()
-    new_df["atr3"] = (df["Low"] - df["Adj Close"].shift()).abs()
-    return new_df[["atr1", "atr2", "atr3"]].max(axis=1)
+    new_df["atr2"] = (df["High"] - df["Close"].shift()).abs()
+    new_df["atr3"] = (df["Low"] - df["Close"].shift()).abs()
+    return simple_moving_average(new_df[["atr1", "atr2", "atr3"]].max(axis=1), window)
 
 
 def average_directional_index(df, window=14):
@@ -75,3 +76,41 @@ def average_directional_index(df, window=14):
     return 100 * simple_moving_average((plus_di - minus_di).abs() / (plus_di + minus_di), window)
 
 
+<<<<<<< HEAD
+=======
+def aroon_indicator(df, window=14):
+    period = 5
+
+    high = df["High"]
+    low = df["Low"]
+
+    highestHigh = pd.rolling_max(high, period)
+    lowestLow = pd.rolling_min(low, period)
+
+    maxIndex = high.index[
+        high.rolling(period).apply(np.argmax)[(period - 1):].astype(float) + np.arange(len(high) - (period - 1))]
+    minIndex = low.index[
+        low.rolling(period).apply(np.argmax)[(period - 1):].astype(float) + np.arange(len(low) - (period - 1))]
+
+    timeDelta_max = ((highestHigh.dropna().index - maxIndex) / np.timedelta64(1, 'D')).astype(int)
+    timeDelta_min = ((lowestLow.dropna().index - minIndex) / np.timedelta64(1, 'D')).astype(int)
+
+    aroon_up = 100 * (period - timeDelta_max)/period
+    aroon_down = 100 * (period - timeDelta_min)/period
+
+
+    return aroon_up
+
+def stochastic_oscillator(df, window=14):
+    period = 14
+
+    high = df["High"]
+    low = df["Low"]
+
+    highestHigh = pd.rolling_max(high, period)
+    lowestLow = pd.rolling_min(low, period)
+
+    k = (df["Close"] - lowestLow)/(highestHigh - lowestLow) * 100
+
+    return pd.rolling_mean(k,3)
+>>>>>>> origin/master
