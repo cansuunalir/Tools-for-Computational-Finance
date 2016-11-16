@@ -76,8 +76,6 @@ def average_directional_index(df, window=14):
     return 100 * simple_moving_average((plus_di - minus_di).abs() / (plus_di + minus_di), window)
 
 
-<<<<<<< HEAD
-=======
 def aroon_indicator(df, window=14):
     period = 5
 
@@ -113,4 +111,3 @@ def stochastic_oscillator(df, window=14):
     k = (df["Close"] - lowestLow)/(highestHigh - lowestLow) * 100
 
     return pd.rolling_mean(k,3)
->>>>>>> origin/master
