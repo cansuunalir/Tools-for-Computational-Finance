@@ -58,26 +58,24 @@ def average_true_range(df, window=14):
 
 
 def average_directional_index(df, window=14):
-    up_move = df["High"].fillna(0).diff()
-    down_move = df["Low"].fillna(0).diff()
+    up_move = df["High"].diff()
+    down_move = df["Low"].diff()
     plus_dm = up_move.copy()
     minus_dm = down_move.copy()
-    plus_dm[up_move < down_move] = 0
-    plus_dm[up_move < 0] = 0
+    plus_dm[up_move <= down_move] = 0
+    plus_dm[up_move <= 0] = 0
 
-    minus_dm[down_move < up_move] = 0
-    minus_dm[down_move < 0] = 0
+    minus_dm[down_move <= up_move] = 0
+    minus_dm[down_move <= 0] = 0
 
     atr = average_true_range(df)
 
-    plus_di = 100 * simple_moving_average(plus_dm, window).fillna(0) / atr
-    minus_di = 100 * simple_moving_average(minus_dm, window).fillna(0) / atr
+    plus_di = 100 * exponential_moving_average(plus_dm, window).fillna(0) / atr
+    minus_di = 100 * exponential_moving_average(minus_dm, window).fillna(0) / atr
 
     return 100 * simple_moving_average((plus_di - minus_di).abs() / (plus_di + minus_di), window)
 
 
-<<<<<<< HEAD
-=======
 def aroon_indicator(df, window=14):
     period = 5
 
@@ -112,5 +110,9 @@ def stochastic_oscillator(df, window=14):
 
     k = (df["Close"] - lowestLow)/(highestHigh - lowestLow) * 100
 
+<<<<<<< HEAD
+    return pd.rolling_mean(k, 3)
+
+=======
     return pd.rolling_mean(k,3)
 >>>>>>> origin/master
