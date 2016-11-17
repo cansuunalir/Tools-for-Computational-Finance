@@ -110,9 +110,6 @@ def stochastic_oscillator(df, window=14):
 
     k = (df["Close"] - lowestLow)/(highestHigh - lowestLow) * 100
 
-<<<<<<< HEAD
+
     return pd.rolling_mean(k, 3)
 
-=======
-    return pd.rolling_mean(k,3)
->>>>>>> origin/master
