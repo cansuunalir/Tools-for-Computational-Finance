@@ -2,11 +2,16 @@ import requests
 import csv
 import pandas as pd
 import matplotlib.pyplot as plt
+<<<<<<< HEAD
 import indicators
 import strategy
 from strategy import MovingAverageCrossStrategy
 from portfolio import MarketOnClosePortfolio
 from backtest import backtest_close
+=======
+import src.indicators
+
+>>>>>>> origin/master
 
 ###
 import datetime
@@ -76,10 +81,15 @@ print(portfolio)
 # df['SMA']  = indicators.simple_moving_average(df, 4)
 #df['EWMA']  = indicators.exponential_moving_average(df['Close'], 26)
 #df['EMA']  = indicators.exponential_moving_average(df['Close'], 14)
+<<<<<<< HEAD
 
 #df['MACD'], df['Signal'], df['Histogram'] = indicators.moving_average_convergence_divergence(df['Close'])
 #print(df['MACD'])
 
+=======
+df['MACD'], df['Signal'], df['Histogram'] = src.indicators.moving_average_convergence_divergence(df['Close'])
+print(df['MACD'])
+>>>>>>> origin/master
 #df['MACD'].plot(grid=True)
 #plt.show()
 #print(df['EWMA'])
