@@ -2,7 +2,7 @@ import requests
 import csv
 import pandas as pd
 import matplotlib.pyplot as plt
-import indicators
+import src.indicators
 
 
 ###
@@ -64,7 +64,7 @@ print(df)
 # df['SMA']  = indicators.simple_moving_average(df, 4)
 #df['EWMA']  = indicators.exponential_moving_average(df['Close'], 26)
 #df['EMA']  = indicators.exponential_moving_average(df['Close'], 14)
-df['MACD'], df['Signal'], df['Histogram'] = indicators.moving_average_convergence_divergence(df['Close'])
+df['MACD'], df['Signal'], df['Histogram'] = src.indicators.moving_average_convergence_divergence(df['Close'])
 print(df['MACD'])
 #df['MACD'].plot(grid=True)
 #plt.show()

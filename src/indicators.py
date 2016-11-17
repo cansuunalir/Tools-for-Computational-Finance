@@ -76,8 +76,8 @@ def average_directional_index(df, window=14):
     return 100 * simple_moving_average((plus_di - minus_di).abs() / (plus_di + minus_di), window)
 
 
-def aroon_indicator(df, window=14):
-    period = 5
+def aroon_indicator(df):
+    period = 5 #25 or 75 days
 
     high = df["High"]
     low = df["Low"]
@@ -90,16 +90,18 @@ def aroon_indicator(df, window=14):
     minIndex = low.index[
         low.rolling(period).apply(np.argmax)[(period - 1):].astype(float) + np.arange(len(low) - (period - 1))]
 
+    dataLength = len(maxIndex)
+
     timeDelta_max = ((highestHigh.dropna().index - maxIndex) / np.timedelta64(1, 'D')).astype(int)
     timeDelta_min = ((lowestLow.dropna().index - minIndex) / np.timedelta64(1, 'D')).astype(int)
 
     aroon_up = 100 * (period - timeDelta_max)/period
     aroon_down = 100 * (period - timeDelta_min)/period
+    aroon_oscillator = aroon_up - aroon_down
 
+    return aroon_up, aroon_down, aroon_oscillator
 
-    return aroon_up
-
-def stochastic_oscillator(df, window=14):
+def stochastic_oscillator(df):
     period = 14
 
     high = df["High"]
